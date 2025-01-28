@@ -10,13 +10,20 @@ public class MappingProfile : Profile
     {
         CreateMap<Event, EventDto>()
             .ForMember(d => d.CurrentBookings, 
-                opt => opt.MapFrom(s => s.Bookings.Count));
-            
+                opt => opt.MapFrom(s => s.Bookings.Count(b => b.Status != BookingStatus.Cancelled)))
+            .ForMember(d => d.CreatedById,
+                opt => opt.MapFrom(s => s.CreatedById))
+            .ForMember(d => d.CreatedAt,
+                opt => opt.MapFrom(s => s.CreatedAt));
+
         CreateMap<Event, EventDetailDto>()
-            .ForMember(d => d.CurrentBookings, 
-                opt => opt.MapFrom(s => s.Bookings.Count));
-            
+            .ForMember(d => d.CurrentBookings,
+                opt => opt.MapFrom(s => s.Bookings.Count(b => b.Status != BookingStatus.Cancelled)));
+
+        CreateMap<User, UserDto>();
+
         CreateMap<EventBooking, EventBookingDto>();
+        
         
         CreateMap<Feedback, FeedbackDto>()
             .ForMember(d => d.EventTitle, 

@@ -9,4 +9,7 @@ public class EventBookingDto
     public Guid UserId { get; set; }
     public BookingStatus Status { get; set; }
     public DateTime BookedAt { get; set; }
+    public DateTime? CancelledAt { get; set; }
+    public UserDto? User { get; set; }
+    public EventDto? Event { get; set; }
 }

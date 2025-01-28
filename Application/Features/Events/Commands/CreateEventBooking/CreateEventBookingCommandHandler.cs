@@ -3,6 +3,7 @@ using Domain;
 using Domain.Exceptions;
 using Domain.Repositories;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Events.Commands.CreateEventBooking;
 
@@ -10,42 +11,47 @@ public class CreateEventBookingCommandHandler : IRequestHandler<CreateEventBooki
 {
     private readonly IEventRepository _eventRepository;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ILogger<CreateEventBookingCommandHandler> _logger;
 
     public CreateEventBookingCommandHandler(
         IEventRepository eventRepository,
-        ICurrentUserService currentUserService)
+        ICurrentUserService currentUserService,
+        ILogger<CreateEventBookingCommandHandler> logger)
     {
         _eventRepository = eventRepository;
         _currentUserService = currentUserService;
+        _logger = logger;
     }
 
     public async Task<Guid> Handle(CreateEventBookingCommand request, CancellationToken cancellationToken)
     {
-        var @event = await _eventRepository.GetByIdAsync(request.EventId);
-        
-        if (@event == null)
-            throw new NotFoundException(nameof(Event), request.EventId);
+        try
+        {
+            _logger.LogInformation("Starting booking creation for event {EventId}", request.EventId);
+            
+            var @event = await _eventRepository.GetByIdAsync(request.EventId);
+            if (@event == null)
+            {
+                _logger.LogWarning("Event {EventId} not found", request.EventId);
+                throw new NotFoundException(nameof(Event), request.EventId);
+            }
 
-        // Check if event is available for booking
-        if (@event.Status != EventStatus.Published)
-            throw new DomainException("Event is not available for booking.");
+            _logger.LogInformation("Event found. Status: {Status}, Capacity: {Capacity}", 
+                @event.Status, @event.Capacity);
 
-        // Check if event is full
-        var isEventFull = await _eventRepository.IsEventFullAsync(request.EventId);
-        if (isEventFull)
-            throw new DomainException("Event is already full.");
+            var booking = EventBooking.Create(request.EventId, _currentUserService.UserId);
+            @event.AddBooking(booking);
 
-        // Check if user already has a booking
-        var existingBooking = @event.Bookings.FirstOrDefault(b => b.UserId == _currentUserService.UserId);
-        if (existingBooking != null)
-            throw new DomainException("You have already booked this event.");
+            _logger.LogInformation("Booking created. Saving changes...");
+            await _eventRepository.UpdateAsync(@event);
+            _logger.LogInformation("Booking {BookingId} saved successfully", booking.Id);
 
-        // Create booking
-        var booking = EventBooking.Create(request.EventId, _currentUserService.UserId);
-        @event.AddBooking(booking);
-
-        await _eventRepository.UpdateAsync(@event);
-
-        return booking.Id;
+            return booking.Id;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to create booking for event {EventId}", request.EventId);
+            throw;
+        }
     }
 }

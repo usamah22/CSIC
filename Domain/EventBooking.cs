@@ -29,6 +29,7 @@ public class EventBooking : BaseEntity
            BookedAt = DateTime.UtcNow
        };
    }
+   
 
    public void UpdateStatus(BookingStatus newStatus)
    {

@@ -25,12 +25,26 @@ public class EventsController : BaseApiController
     [HttpGet("{id}")]
     public async Task<ActionResult<EventDetailDto>> GetEvent(Guid id)
     {
-        var result = await Mediator.Send(new GetEventByIdQuery { Id = id });
-        if (result == null)
-            return NotFound();
-        return result;
+        try
+        {
+            var result = await Mediator.Send(new GetEventByIdQuery { Id = id });
+            if (result == null)
+                return NotFound();
+            return result;
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error retrieving event", details = ex.Message });
+        }
     }
-
+    
+    [HttpPost]
+    [Authorize(Roles = "Admin,Staff")]
+    public async Task<ActionResult<Guid>> Create(CreateEventCommand command)
+    {
+        var eventId = await Mediator.Send(command);
+        return Ok(eventId);
+    }
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin,Staff")]
     public async Task<ActionResult> Update(Guid id, UpdateEventCommand command)
@@ -56,7 +70,16 @@ public class EventsController : BaseApiController
     public async Task<ActionResult<Guid>> CreateBooking(Guid id, CreateEventBookingCommand command)
     {
         if (id != command.EventId)
-            return BadRequest();
-        return await Mediator.Send(command);
+            return BadRequest("Event ID mismatch");
+
+        try
+        {
+            var bookingId = await Mediator.Send(command);
+            return Ok(new { bookingId }); // Return in a structured format
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
     }
 }
