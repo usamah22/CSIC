@@ -26,9 +26,10 @@ public class MappingProfile : Profile
         
         
         CreateMap<Feedback, FeedbackDto>()
-            .ForMember(d => d.EventTitle, 
-                opt => opt.MapFrom(s => s.Event.Title))
-            .ForMember(d => d.UserFullName, 
-                opt => opt.MapFrom(s => $"{s.User.FirstName} {s.User.LastName}"));
+            .ForMember(d => d.EventTitle, opt => opt.MapFrom(s => s.Event.Title))
+            .ForMember(d => d.UserFullName, opt => 
+                opt.MapFrom(s => string.IsNullOrWhiteSpace(s.User.FullName) 
+                    ? s.User.Email 
+                    : s.User.FullName));
     }
 }

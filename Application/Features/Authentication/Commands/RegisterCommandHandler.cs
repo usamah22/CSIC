@@ -34,10 +34,11 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Authentic
         // Create user
         var user = User.Create(
             request.Email,
+            UserRole.Student,
             request.FirstName,
             request.LastName,
-            _passwordHasher.HashPassword(request.Password),
-            UserRole.Student  // Default role for registration
+            _passwordHasher.HashPassword(request.Password)
+            
         );
 
         // Save user

@@ -24,7 +24,27 @@ public class FeedbackRepository : BaseRepository<Feedback>, IFeedbackRepository
             .ToListAsync();
     }
 
-    public override async Task<Feedback> GetByIdAsync(Guid id)
+    public async Task<IReadOnlyList<Feedback>> GetEventFeedbackAsync(Guid eventId)
+    {
+        return await _context.Feedback
+            .AsNoTracking()
+            .Include(f => f.User)
+            .Include(f => f.Event)
+            .Where(f => f.EventId == eventId)
+            .OrderByDescending(f => f.CreatedAt)
+            .ToListAsync();
+    }
+
+    public async Task<Feedback?> GetUserEventFeedbackAsync(Guid eventId, Guid userId)
+    {
+        return await _context.Feedback
+            .AsNoTracking()
+            .Include(f => f.Event)
+            .Include(f => f.User)
+            .FirstOrDefaultAsync(f => f.EventId == eventId && f.UserId == userId);
+    }
+
+    public override async Task<Feedback?> GetByIdAsync(Guid id)
     {
         return await _context.Feedback
             .Include(f => f.Event)

@@ -22,6 +22,23 @@ public class FeedbackController : BaseApiController
         return await Mediator.Send(new GetUserFeedbackQuery());
     }
 
+    [HttpGet("events/{eventId}")]
+    public async Task<ActionResult<List<FeedbackDto>>> GetEventFeedback(Guid eventId)
+    {
+        return await Mediator.Send(new GetEventFeedbackQuery(eventId));
+    }
+
+    [HttpPost("events/{eventId}")]
+    [Authorize]
+    public async Task<ActionResult<Guid>> CreateFeedback(Guid eventId, CreateFeedbackCommand command)
+    {
+        if (eventId != command.EventId)
+            return BadRequest();
+
+        var feedbackId = await Mediator.Send(command);
+        return Ok(feedbackId);
+    }
+
     [HttpPut("{id}")]
     [Authorize]
     public async Task<ActionResult> UpdateFeedback(Guid id, UpdateFeedbackCommand command)
