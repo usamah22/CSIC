@@ -31,5 +31,8 @@ public class MappingProfile : Profile
                 opt.MapFrom(s => string.IsNullOrWhiteSpace(s.User.FullName) 
                     ? s.User.Email 
                     : s.User.FullName));
+        
+        CreateMap<Domain.ContactMessage, DTOs.ContactMessageDto>()
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Value));
     }
 }

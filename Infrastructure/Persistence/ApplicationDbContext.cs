@@ -18,6 +18,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<JobPosting> JobPostings { get; set; }
     public DbSet<Feedback> Feedback { get; set; }
     public DbSet<Notification> Notifications { get; set; }
+    
+    public DbSet<ContactMessage> ContactMessages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

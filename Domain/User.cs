@@ -44,6 +44,18 @@ public class User : BaseEntity
             IsActive = true
         };
     }
+    
+    public void UpdateRole(UserRole newRole)
+    {
+        Role = newRole;
+        LastModifiedAt = DateTime.UtcNow;
+    }
+    
+    public void SetActive(bool isActive)
+    {
+        IsActive = isActive;
+        LastModifiedAt = DateTime.UtcNow;
+    }
 }
 
 public enum UserRole
