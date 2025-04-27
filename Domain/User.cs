@@ -32,18 +32,21 @@ public class User : BaseEntity
         string firstName = "",
         string lastName = "",
         string password = ""
-        )
+    )
     {
         return new User
         {
+            Id = Guid.NewGuid(),   
             Email = email.ToLower(),
             FirstName = firstName,
             LastName = lastName,
             Password = password,
             Role = role,
-            IsActive = true
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow  
         };
     }
+
     
     public void UpdateRole(UserRole newRole)
     {
