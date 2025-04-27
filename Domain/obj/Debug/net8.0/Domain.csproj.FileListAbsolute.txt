@@ -10,3 +10,15 @@ C:\Users\zahid\OneDrive\Documents\Usamah\FinalYearProject\CSIC\Domain\obj\Debug\
 C:\Users\zahid\OneDrive\Documents\Usamah\FinalYearProject\CSIC\Domain\obj\Debug\net8.0\refint\Domain.dll
 C:\Users\zahid\OneDrive\Documents\Usamah\FinalYearProject\CSIC\Domain\obj\Debug\net8.0\Domain.pdb
 C:\Users\zahid\OneDrive\Documents\Usamah\FinalYearProject\CSIC\Domain\obj\Debug\net8.0\ref\Domain.dll
+C:\Users\usama\RiderProjects\CSIC\Domain\bin\Debug\net8.0\Domain.deps.json
+C:\Users\usama\RiderProjects\CSIC\Domain\bin\Debug\net8.0\Domain.dll
+C:\Users\usama\RiderProjects\CSIC\Domain\bin\Debug\net8.0\Domain.pdb
+C:\Users\usama\RiderProjects\CSIC\Domain\obj\Debug\net8.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\usama\RiderProjects\CSIC\Domain\obj\Debug\net8.0\Domain.AssemblyInfoInputs.cache
+C:\Users\usama\RiderProjects\CSIC\Domain\obj\Debug\net8.0\Domain.AssemblyInfo.cs
+C:\Users\usama\RiderProjects\CSIC\Domain\obj\Debug\net8.0\Domain.csproj.CoreCompileInputs.cache
+C:\Users\usama\RiderProjects\CSIC\Domain\obj\Debug\net8.0\Domain.sourcelink.json
+C:\Users\usama\RiderProjects\CSIC\Domain\obj\Debug\net8.0\Domain.dll
+C:\Users\usama\RiderProjects\CSIC\Domain\obj\Debug\net8.0\refint\Domain.dll
+C:\Users\usama\RiderProjects\CSIC\Domain\obj\Debug\net8.0\Domain.pdb
+C:\Users\usama\RiderProjects\CSIC\Domain\obj\Debug\net8.0\ref\Domain.dll

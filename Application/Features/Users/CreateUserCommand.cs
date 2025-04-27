@@ -16,12 +16,23 @@ namespace Application.Features.Users.Commands
         public string Email { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
+
 
     public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
     {
         public CreateUserCommandValidator()
         {
+            RuleFor(x => x.FirstName)
+                .NotEmpty().WithMessage("First name is required");
+
+            RuleFor(x => x.LastName)
+                .NotEmpty().WithMessage("Last name is required");
+
+            
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage("Email is required")
                 .EmailAddress().WithMessage("A valid email address is required");
@@ -72,8 +83,12 @@ namespace Application.Features.Users.Commands
             var user = User.Create(
                 email: request.Email,
                 role: userRole,
+                firstName: request.FirstName,
+                lastName: request.LastName,
                 password: hashedPassword
             );
+
+            
 
             // Save to repository
             await _userRepository.AddAsync(user);
